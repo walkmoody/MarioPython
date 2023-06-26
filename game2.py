@@ -529,6 +529,7 @@ def main () :
       screen = splash_screen()
     elif screen == 'menu' :
       screen = menu_screen()
+      lives = 4
     elif screen == 'game' or screen == 'death':
       while(screen == 'game' or screen == 'death'):
         if screen == 'game':
