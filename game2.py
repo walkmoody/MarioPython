@@ -223,6 +223,7 @@ def game_screen(lives):
   isGround = True
   collisionDict = Collision()
   right = True
+  goalX = 8000
 
   deathDict = {
      'hole1' : [3100],
@@ -412,6 +413,11 @@ def game_screen(lives):
 
         return 'death'
     death = 'false'
+    
+    if characterX == goalX - CameraX:
+       print('win')
+
+    #if characterX == g
     #need to be last 2 lines
     #updates the screen
     pygame.display.flip()
