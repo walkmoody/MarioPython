@@ -147,7 +147,7 @@ def Collision():
     "pipe2" : [1680, 192],
     "pipe3" : [2030, 245],
     "pipe4" : [2530, 245],
-    "pipe5" : [7320, 128],
+    "pipe5" : [7320, 145],
     "pipe6" : [8040, 128]
   }
 
@@ -223,7 +223,7 @@ def game_screen(lives):
   isGround = True
   collisionDict = Collision()
   right = True
-  goalX = 8000
+  goalX = 8850 # 8850
 
   deathDict = {
      'hole1' : [3100],
@@ -262,6 +262,8 @@ def game_screen(lives):
         printCharacter = mario
         CameraX += cameraSpeed
         count += 1
+        if CameraX > 8379:
+          characterX = characterX - marioSpeed + cameraSpeed
         if (count < 5):
           printCharacter = marioRun1
         else:
@@ -275,6 +277,7 @@ def game_screen(lives):
         if(keys[K_LSHIFT]):
             characterX = characterX + (marioSpeed * 2)
             CameraX += cameraSpeed + 4
+
     if (keys[K_LEFT] or keys[K_a]) :
         right = False
         characterX = characterX - marioSpeed
@@ -292,11 +295,12 @@ def game_screen(lives):
         if(keys[K_LSHIFT]):
             characterX = characterX - (marioSpeed * 2)
             CameraX -= cameraSpeed - 4
-    if (characterX  < -4) :
+
+    if (characterX  < -4) : # stops mario from going to the left off screeb
         characterX = characterX + marioSpeed
     if (CameraX < 0) :
       CameraX = CameraX + cameraSpeed
-    if (characterX  > WINDOW_WIDTH/5) :
+    if (characterX  > WINDOW_WIDTH/5 and CameraX < 8375): # Stops mario from running off screen right
         characterX = characterX - marioSpeed
         if(keys[K_LSHIFT]):
           characterX = characterX - (marioSpeed * 2)
@@ -317,6 +321,8 @@ def game_screen(lives):
       characterY = characterY - marioJumpVelocity
     if characterY > 570:
          characterY = 570
+    
+ 
 
     #Animation Test (or hidden Feature: emote)
     if (keys[K_m]):
@@ -413,11 +419,39 @@ def game_screen(lives):
 
         return 'death'
     death = 'false'
-    
-    if characterX == goalX - CameraX:
+    print(CameraX)
+       #Stops camera at the end of the map
+    if CameraX > 8380:
+       CameraX = CameraX - cameraSpeed
+    if characterX > goalX - CameraX:
        print('win')
+       looping = False
+       trueState = True
+       deathTest = characterY 
+       death2 = 0
+       while trueState:
+        for event in pygame.event.get() :
+            if event.type == QUIT :
+              pygame.quit()
+              sys.exit()
+            deathTest =  deathTest - 3
+            if deathTest < characterY - 50:
+              deathTest = deathTest + 1
+            if deathTest < characterY - 100:
+              death2 = deathTest
+            if death2 != 0:
+              deathTest =  deathTest + 7
+            if deathTest > 650:
+              trueState = False
+            WINDOW.blit(bg,(0 -CameraX,0 -CameraY))  
+           # WINDOW.blit(goomba1, (characterX + 10 , characterY + 5)) 
+            WINDOW.blit(marioDeath, (characterX, deathTest))
+            pygame.display.flip()
+            pygame.display.update()
+            fpsClock.tick(FPS)
+        return ''
 
-    #if characterX == g
+    
     #need to be last 2 lines
     #updates the screen
     pygame.display.flip()
