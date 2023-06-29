@@ -223,7 +223,7 @@ def game_screen(lives):
   isGround = True
   collisionDict = Collision()
   right = True
-  goalX = 8850 # 8850
+  goalX = 8900 # 8850
 
   deathDict = {
      'hole1' : [3100],
@@ -262,8 +262,10 @@ def game_screen(lives):
         printCharacter = mario
         CameraX += cameraSpeed
         count += 1
-        if CameraX > 8379:
+        if CameraX > 8380:
           characterX = characterX - marioSpeed + cameraSpeed
+        if CameraX > 8380:
+          CameraX = CameraX - cameraSpeed
         if (count < 5):
           printCharacter = marioRun1
         else:
@@ -282,7 +284,10 @@ def game_screen(lives):
         right = False
         characterX = characterX - marioSpeed
         printCharacter = pygame.transform.flip(mario, True, False)
-        CameraX -= cameraSpeed 
+        if (characterX < WINDOW_WIDTH/5):
+          CameraX -= cameraSpeed 
+        else:
+          characterX = characterX + marioSpeed - cameraSpeed
         countLeft += 1
         if (countLeft < 5):
           printCharacter = pygame.transform.flip(marioRun1, True, False)
@@ -421,35 +426,33 @@ def game_screen(lives):
     death = 'false'
     print(CameraX)
        #Stops camera at the end of the map
-    if CameraX > 8380:
-       CameraX = CameraX - cameraSpeed
+    
     if characterX > goalX - CameraX:
-       print('win')
-       looping = False
-       trueState = True
-       deathTest = characterY 
-       death2 = 0
-       while trueState:
+      print('win')
+      looping = False
+      trueState = True
+      poleY = characterY
+      marioFinish = characterX
+      while trueState:
         for event in pygame.event.get() :
-            if event.type == QUIT :
-              pygame.quit()
-              sys.exit()
-            deathTest =  deathTest - 3
-            if deathTest < characterY - 50:
-              deathTest = deathTest + 1
-            if deathTest < characterY - 100:
-              death2 = deathTest
-            if death2 != 0:
-              deathTest =  deathTest + 7
-            if deathTest > 650:
-              trueState = False
-            WINDOW.blit(bg,(0 -CameraX,0 -CameraY))  
-           # WINDOW.blit(goomba1, (characterX + 10 , characterY + 5)) 
-            WINDOW.blit(marioDeath, (characterX, deathTest))
-            pygame.display.flip()
-            pygame.display.update()
-            fpsClock.tick(FPS)
-        return ''
+          if event.type == QUIT :
+            pygame.quit()
+            sys.exit()
+        if poleY < 510:
+          poleY += 5
+        else:
+          poleY = 520
+          if marioFinish < 1000:
+            marioFinish += 7
+            print(marioFinish)
+          else:
+            trueState = False
+        WINDOW.blit(bg,(0 -CameraX,0 -CameraY))  
+        WINDOW.blit(mario, (marioFinish, poleY))
+        pygame.display.flip()
+        pygame.display.update()
+        fpsClock.tick(FPS)
+      return 'menu'
 
     
     #need to be last 2 lines
