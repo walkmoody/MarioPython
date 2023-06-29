@@ -326,8 +326,6 @@ def game_screen(lives):
       characterY = characterY - marioJumpVelocity
     if characterY > 570:
          characterY = 570
-    
- 
 
     #Animation Test (or hidden Feature: emote)
     if (keys[K_m]):
@@ -433,6 +431,7 @@ def game_screen(lives):
       trueState = True
       poleY = characterY
       marioFinish = characterX
+      marioPrint = mario
       while trueState:
         for event in pygame.event.get() :
           if event.type == QUIT :
@@ -444,17 +443,19 @@ def game_screen(lives):
           poleY = 520
           if marioFinish < 1000:
             marioFinish += 7
+            if poleY > 300:
+              poleY -= 3
+              marioPrint = marioJump
             print(marioFinish)
           else:
             trueState = False
         WINDOW.blit(bg,(0 -CameraX,0 -CameraY))  
-        WINDOW.blit(mario, (marioFinish, poleY))
+        WINDOW.blit(marioPrint, (marioFinish, poleY))
         pygame.display.flip()
         pygame.display.update()
         fpsClock.tick(FPS)
       return 'menu'
 
-    
     #need to be last 2 lines
     #updates the screen
     pygame.display.flip()
