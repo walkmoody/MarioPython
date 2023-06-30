@@ -37,6 +37,21 @@ CHARACTER = (255, 30, 70) # Change color rn it is red
 WINDOW = pygame.display.set_mode((WINDOW_WIDTH, WINDOW_HEIGHT))
 TEXTCOLOUR = (0, 0, 0)
 
+#Mario Sprite list
+mario = pygame.image.load('images\mario.png').convert_alpha()
+mario = pygame.transform.scale(mario, (55, 55))
+marioRun1   = pygame.image.load('images\MarioRun1.png').convert_alpha()
+marioRun1 = pygame.transform.scale(marioRun1, (60, 60))
+middleRun = pygame.image.load('images\MarioRun2.png').convert_alpha()
+middleRun = pygame.transform.scale(middleRun, (55, 55))
+marioRun3 = pygame.image.load('images\MarioRun3.png').convert_alpha()
+marioRun3 = pygame.transform.scale(marioRun3, (60, 60))
+marioJump = pygame.image.load('images\Jump.png').convert_alpha()
+marioJump = pygame.transform.scale(marioJump, (55, 55))
+marioJumpLeft = pygame.transform.flip(marioJump, True, False)
+marioDeath = pygame.image.load('images\marioDeath.png').convert_alpha()
+marioDeath = pygame.transform.scale(marioDeath, (55, 55))
+
 
 #WINDOW.fill(BACKGROUND)
 pygame.display.set_caption('Mario')
@@ -110,7 +125,7 @@ def Pause():
         sys.exit()
     keys = pygame.key.get_pressed()
     print("test")
-    if(keys[K_p]):
+    if(keys[K_w]):
        return
     WINDOW.blit(BACKGROUND)
     
@@ -153,7 +168,91 @@ def Collision():
 
   return Dict
 
-def Goomba(CameraX, goombXCalc, characterX, characterY):
+def Holes():
+  Dict = {
+      'hole1' : [3100],
+      'hole2' : [3870],
+      'hole3' : [6870]
+  }
+
+  return Dict
+
+def HoleTouch(characterX, characterY, CameraX, CameraY):
+  trueState = True
+  deathTest = characterY 
+  mult = 1
+  while trueState:
+    for event in pygame.event.get() :
+      if event.type == QUIT :
+        pygame.quit()
+        sys.exit()
+    mult = (mult * mult)
+    deathTest =  deathTest + 6 + mult
+    characterX = characterX + 1
+    if deathTest > 820:
+      trueState = False
+    WINDOW.blit(bg,(0 -CameraX,0 -CameraY))  
+    WINDOW.blit(marioJump, (characterX, deathTest))
+    pygame.display.flip()
+    pygame.display.update()
+    fpsClock.tick(FPS)
+  return 'death'
+
+def flagpole(characterY, characterX, CameraX, CameraY):
+  print('win')
+  trueState = True
+  poleY = characterY
+  marioFinish = characterX
+  marioPrint = mario
+  count = -1
+  countX = 0
+  poleRight = False
+  while trueState:
+    for event in pygame.event.get() :
+      if event.type == QUIT :
+        pygame.quit()
+        sys.exit()
+    if poleY < 510 and poleRight == False:
+      poleY += 5
+    elif count == -1:
+      poleY = 520
+      count = count + 1
+      poleRight = True
+    else:
+      if marioFinish < 1000:
+        if count < 100:
+          if marioFinish < 560:
+            marioFinish = 560
+          marioPrint = pygame.transform.flip(mario, True, False)
+          count += 3
+        else:
+          marioFinish += 7
+          if poleY < 570:
+            poleY = poleY + 3
+            marioPrint = marioJump
+            #print(marioFinish)
+            print(poleY)
+          else:
+            countX += 1
+            poleY = 570
+            if (countX < 5):
+              marioPrint = marioRun1
+            elif ( countX < 10):
+                marioPrint = middleRun
+            elif ( countX < 15):
+              marioPrint = marioRun3
+            else: 
+              countX = 0
+      else:
+        trueState = False
+    WINDOW.blit(bg,(0 -CameraX,0 -CameraY))  
+    WINDOW.blit(marioPrint, (marioFinish, poleY))
+    pygame.display.flip()
+    pygame.display.update()
+    fpsClock.tick(FPS)
+  return 'menu'
+
+def Goomba(CameraX, CameraY, goombXCalc, characterX, characterY):
   goomba1 = pygame.image.load('images\Goomba1.png').convert_alpha()
   goomba1 = pygame.transform.scale(goomba1, (50, 50))
   Goomba2 = pygame.image.load('images\Goomba2.png').convert_alpha()
@@ -173,63 +272,56 @@ def Goomba(CameraX, goombXCalc, characterX, characterY):
   if(characterX < goombaX + 15 and characterX > goombaX - 15 and characterY < goombaY - 5 and characterY > goombaY -30):
      return 'jump'
   if(characterX < goombaX + 10 and characterX > goombaX - 10 and characterY == goombaY - 5):
-     return 'true'
+    trueState = True
+    deathTest = characterY 
+    death2 = 0
+    while trueState:
+      for event in pygame.event.get() :
+        if event.type == QUIT :
+          pygame.quit()
+          sys.exit()
+      deathTest =  deathTest - 3
+      if deathTest < characterY - 50:
+        deathTest = deathTest + 1
+      if deathTest < characterY - 100:
+        death2 = deathTest
+      if death2 != 0:
+        deathTest =  deathTest + 7
+        if deathTest > 650:
+          trueState = False
+      WINDOW.blit(bg,(0 -CameraX,0 -CameraY))  
+      WINDOW.blit(goomba1, (characterX + 10 , characterY + 5)) 
+      WINDOW.blit(marioDeath, (characterX, deathTest))
+      pygame.display.flip()
+      pygame.display.update()
+      fpsClock.tick(FPS)
+    return 'true'
   else:
-     return 'false'
-  
+     return 'false'    
 
 def game_screen(lives): 
-  #NEEDED LINE
+  #allows game to run
   looping = True
-  #Main mario sprite
-  mario = pygame.image.load('images\mario.png').convert_alpha()
-  mario = pygame.transform.scale(mario, (55, 55))
   #character spawn location
   characterX = 0
   characterY = 570
-  #mario death sprite
-  marioDeath = pygame.image.load('images\marioDeath.png').convert_alpha()
-  marioDeath = pygame.transform.scale(marioDeath, (55, 55))
-  #mario Jump sprite
-  marioJump = pygame.image.load('images\Jump.png').convert_alpha()
-  marioJump = pygame.transform.scale(marioJump, (55, 55))
-  marioJumpLeft = pygame.transform.flip(marioJump, True, False)
-  #mario RUN SPRITES
-  marioRun1   = pygame.image.load('images\MarioRun1.png').convert_alpha()
-  marioRun1 = pygame.transform.scale(marioRun1, (60, 60))
-  middleRun = pygame.image.load('images\MarioRun2.png').convert_alpha()
-  middleRun = pygame.transform.scale(middleRun, (55, 55))
-  marioRun3 = pygame.image.load('images\MarioRun3.png').convert_alpha()
-  marioRun3 = pygame.transform.scale(marioRun3, (60, 60))
   #Jump Strength
   marioJumpVelocity = -23
   jumpStrength = 22
   #Camera
-  x,y = 0, 0
-  CameraX = x
-  CameraY= y
-  #Block
-  block = pygame.image.load('images\Block.png').convert_alpha()
-  block = pygame.transform.scale(block, (70, 70))
-  count = 0
-  countLeft = 0
+  CameraX, CameraY= 0, 0
+  #allows for mario Run animation
   printCharacter = mario
+  count, countLeft = 0, 0
   #Goomba
   goombXCalc = 0
   goombaDeath = False
-  goomba1 = pygame.image.load('images\Goomba1.png').convert_alpha()
-  goomba1 = pygame.transform.scale(goomba1, (50, 50))
   #add lives to screen
   isGround = True
-  collisionDict = Collision()
   right = True
+  collisionDict = Collision()
+  deathDict = Holes()
   goalX = 8900 # 8850
-
-  deathDict = {
-     'hole1' : [3100],
-     'hole2' : [3870],
-     'hole3' : [6870]
-  }
 
   while looping :
     # Checks for orientation of player
@@ -334,7 +426,7 @@ def game_screen(lives):
         printCharacter = middleRun
     if (keys[K_o]):
       printCharacter = marioRun3
-     
+    
     #Prints the backgounrd and character sprte
     WINDOW.fill(BACKGROUND)
     WINDOW.blit(bg,(0 -CameraX,0 -CameraY))
@@ -366,94 +458,24 @@ def game_screen(lives):
       holeX = y[0] - CameraX
       holeEnd = y[0] + 100  - CameraX
       if(characterX > holeX and characterX < holeEnd and characterY > 569):
-        trueState = True
-        deathTest = characterY 
-        death2 = 0
-        mult = 1
-        while trueState:
-          for event in pygame.event.get() :
-            if event.type == QUIT :
-              pygame.quit()
-              sys.exit()
-          mult = (mult * mult)
-          deathTest =  deathTest + 6 + mult
-          characterX = characterX + 1
-          if deathTest > 820:
-            trueState = False
-          WINDOW.blit(bg,(0 -CameraX,0 -CameraY))  
-          WINDOW.blit(marioJump, (characterX, deathTest))
-          pygame.display.flip()
-          pygame.display.update()
-          fpsClock.tick(FPS)
+        looping = False
+        HoleTouch(characterX, characterY, CameraX, CameraY)
         return 'death'
-      
+        
     #all goomba calculations including death and jump
     goombXCalc = goombXCalc + 1 #goomba Count in order to calc x value (allows movement)
     if goombaDeath == False:
-      death = Goomba(CameraX, goombXCalc, characterX, characterY)
+      death = Goomba(CameraX, CameraY, goombXCalc, characterX, characterY)
       if (death == 'jump'):
         goombaDeath = True
         marioJumpVelocity = jumpStrength
       if (death == 'true'):
-        looping = False
-        trueState = True
-        deathTest = characterY 
-        death2 = 0
-        while trueState:
-          for event in pygame.event.get() :
-            if event.type == QUIT :
-              pygame.quit()
-              sys.exit()
-          deathTest =  deathTest - 3
-          if deathTest < characterY - 50:
-            deathTest = deathTest + 1
-          if deathTest < characterY - 100:
-            death2 = deathTest
-          if death2 != 0:
-            deathTest =  deathTest + 7
-            if deathTest > 650:
-              trueState = False
-          WINDOW.blit(bg,(0 -CameraX,0 -CameraY))  
-          WINDOW.blit(goomba1, (characterX + 10 , characterY + 5)) 
-          WINDOW.blit(marioDeath, (characterX, deathTest))
-          pygame.display.flip()
-          pygame.display.update()
-          fpsClock.tick(FPS)
-
         return 'death'
-    death = 'false'
-    print(CameraX)
-       #Stops camera at the end of the map
-    
+
+    #Win condition
     if characterX > goalX - CameraX:
-      print('win')
       looping = False
-      trueState = True
-      poleY = characterY
-      marioFinish = characterX
-      marioPrint = mario
-      while trueState:
-        for event in pygame.event.get() :
-          if event.type == QUIT :
-            pygame.quit()
-            sys.exit()
-        if poleY < 510:
-          poleY += 5
-        else:
-          poleY = 520
-          if marioFinish < 1000:
-            marioFinish += 7
-            if poleY > 300:
-              poleY -= 3
-              marioPrint = marioJump
-            print(marioFinish)
-          else:
-            trueState = False
-        WINDOW.blit(bg,(0 -CameraX,0 -CameraY))  
-        WINDOW.blit(marioPrint, (marioFinish, poleY))
-        pygame.display.flip()
-        pygame.display.update()
-        fpsClock.tick(FPS)
+      flagpole(characterY, characterX, CameraX, CameraY)
       return 'menu'
 
     #need to be last 2 lines
@@ -484,7 +506,6 @@ def game_over_screen ():
   time.sleep(2)
  
   return action
-
 
 def instructions_screen () : #FIXME need to change the instruction screen
   looping = True
