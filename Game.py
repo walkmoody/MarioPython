@@ -29,7 +29,7 @@ Pipes = pygame.transform.scale(Pipes, (1170, 900))
 #Color declarations and set ups
 BACKGROUND = (205, 215, 220) # make a random color that changes
 OPENINGBACKGROUND = (255, 255, 255)
-TEXTCOLOUR = (200, 100, 0)
+# EXTCOLOUR = (200, 100, 0) Orange
 BLACKGROUND = (0,0,0)
 WHITE = (255, 255, 255)
 RED = (255, 30, 70)
@@ -383,8 +383,8 @@ def game_screen(lives):
           CameraX -= cameraSpeed 
         else:
           characterX = characterX + marioSpeed - cameraSpeed
-        if isPipe == True:
-          characterX = characterX - cameraSpeed + marioSpeed + marioSpeed
+        if isPipe == True and characterX < WINDOW_WIDTH/5:
+          characterX = characterX + marioSpeed - cameraSpeed + marioSpeed
         countLeft += 1
         if (countLeft < 5):
           printCharacter = pygame.transform.flip(marioRun1, True, False)
@@ -432,9 +432,6 @@ def game_screen(lives):
     if (keys[K_o]):
       printCharacter = marioRun3
     
-    #Prints the backgounrd and character sprte
-
-
     #Collision loop checks for pipe collison
     for x,y, in collisionDict.items():
       pipe1X = y[0] - CameraX
@@ -447,14 +444,14 @@ def game_screen(lives):
         isGround = False
         if(characterY == pipe1Y - pipe1H):
           marioJumpVelocity = -23
-        if not (keys[K_SPACE] ) and characterY > pipe1Y - pipe1H:
+        if (not (keys[K_SPACE]) and characterY > pipe1Y - pipe1H): #or ((keys[K_SPACE] ) or characterY < pipe1Y - pipe1H): #FIX ME 
           characterY = pipe1Y - pipe1H
       else:
         isGround = True
       if(characterX < pipe1X + 15 + 100  and characterX > pipe1X - 15 + 100 and characterY < pipe1Y and characterY > pipe1Y - pipe1H and (keys[K_LEFT] or keys[K_a]) ):
         characterX = characterX + marioSpeed
         CameraX = CameraX + cameraSpeed
-
+    #allows the player to go into 4th pipe
     if(characterX < 2530 -CameraX + 95 and characterX > 2530 -CameraX - 14):
       if characterY > 250:
         if(keys[K_DOWN]):
@@ -462,10 +459,31 @@ def game_screen(lives):
           CameraX = -1000
           characterX = 60
           characterY = 0
+    #if player is in the fourth pipe it no longer moves camera
     if isPipe == True:
       CameraX = -1000
-      if characterX < 40:
-        characterX = characterX + cameraSpeed
+      blockHeight = 390
+      print(characterX)
+      if characterX < 40: # collision for left wall
+        characterX = characterX + cameraSpeed - marioSpeed
+      if (characterX > 135 and characterX < 150 and characterY > blockHeight) or (characterX > 670 and characterX < 710 and characterY > blockHeight):
+        if characterX > 135 and characterX < 150 :
+          characterX = characterX - cameraSpeed
+        if characterX > 670 and characterX < 710:
+          characterX = characterX + cameraSpeed
+      elif(characterX > 135 and characterX < 700):
+        isGround = False
+        if(characterY == blockHeight):
+          marioJumpVelocity = -23
+        if not (keys[K_SPACE] ) and characterY > blockHeight:
+          characterY = blockHeight
+        else:
+          isGround = True
+      if characterX > 850:
+        isPipe = False
+        CameraX = 7220
+        characterX = 120
+        characterY = 580
     #Calculations for holes
     for x,y in deathDict.items():
       holeX = y[0] - CameraX
@@ -475,14 +493,12 @@ def game_screen(lives):
         HoleTouch(characterX, characterY, CameraX, CameraY)
         return 'death'
     
- 
-
     #Win condition
     if characterX > goalX - CameraX:
       looping = False
       flagpole(characterY, characterX, CameraX, CameraY)
       return 'menu'
-    
+    #Prints the background and character sprites
     WINDOW.fill(BACKGROUND)
     WINDOW.blit(bg,(0 -CameraX,0 -CameraY))
     if isPipe:
