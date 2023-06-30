@@ -23,6 +23,8 @@ MainMenuTrue = pygame.image.load("images\MainMenuTrue.png")
 MainMenuTrue = pygame.transform.scale(MainMenuTrue, (1000, 1000))
 DeathScreen = pygame.image.load("images/MARIODEATHSCREEN.png")
 DeathScreen = pygame.transform.scale(DeathScreen, (1000, 900))
+Pipes = pygame.image.load("images/PIPES.png")
+Pipes = pygame.transform.scale(Pipes, (1170, 900))
 
 #Color declarations and set ups
 BACKGROUND = (205, 215, 220) # make a random color that changes
@@ -198,6 +200,7 @@ def HoleTouch(characterX, characterY, CameraX, CameraY):
     fpsClock.tick(FPS)
   return 'death'
 
+
 def flagpole(characterY, characterX, CameraX, CameraY):
   print('win')
   trueState = True
@@ -270,7 +273,7 @@ def Goomba(CameraX, CameraY, goombXCalc, characterX, characterY):
   goombaX = -CameraX + 950 - goombXCalc
   WINDOW.blit(GoombaPrint, (goombaX, goombaY))
   if(characterX < goombaX + 15 and characterX > goombaX - 15 and characterY < goombaY - 5 and characterY > goombaY -30):
-     return 'jump'
+    return 'jump'
   if(characterX < goombaX + 10 and characterX > goombaX - 10 and characterY == goombaY - 5):
     trueState = True
     deathTest = characterY 
@@ -297,7 +300,8 @@ def Goomba(CameraX, CameraY, goombXCalc, characterX, characterY):
       fpsClock.tick(FPS)
     return 'true'
   else:
-     return 'false'    
+    return 'false'    
+  
 
 def game_screen(lives): 
   #allows game to run
@@ -322,7 +326,7 @@ def game_screen(lives):
   collisionDict = Collision()
   deathDict = Holes()
   goalX = 8900 # 8850
-
+  isPipe = False
   while looping :
     # Checks for orientation of player
     if(right == True):
@@ -354,7 +358,7 @@ def game_screen(lives):
         printCharacter = mario
         CameraX += cameraSpeed
         count += 1
-        if CameraX > 8380:
+        if CameraX > 8380 or isPipe:
           characterX = characterX - marioSpeed + cameraSpeed
         if CameraX > 8380:
           CameraX = CameraX - cameraSpeed
@@ -379,6 +383,8 @@ def game_screen(lives):
           CameraX -= cameraSpeed 
         else:
           characterX = characterX + marioSpeed - cameraSpeed
+        if isPipe == True:
+          characterX = characterX - cameraSpeed + marioSpeed + marioSpeed
         countLeft += 1
         if (countLeft < 5):
           printCharacter = pygame.transform.flip(marioRun1, True, False)
@@ -392,11 +398,11 @@ def game_screen(lives):
             characterX = characterX - (marioSpeed * 2)
             CameraX -= cameraSpeed - 4
 
-    if (characterX  < -4) : # stops mario from going to the left off screeb
+    if (characterX  < -4 and isPipe == False) : # stops mario from going to the left off screeb
         characterX = characterX + marioSpeed
-    if (CameraX < 0) :
+    if (CameraX < 0 and isPipe == False) :
       CameraX = CameraX + cameraSpeed
-    if (characterX  > WINDOW_WIDTH/5 and CameraX < 8375): # Stops mario from running off screen right
+    if (characterX  > WINDOW_WIDTH/5 and CameraX < 8375 and not isPipe): # Stops mario from running off screen right
         characterX = characterX - marioSpeed
         if(keys[K_LSHIFT]):
           characterX = characterX - (marioSpeed * 2)
@@ -427,9 +433,7 @@ def game_screen(lives):
       printCharacter = marioRun3
     
     #Prints the backgounrd and character sprte
-    WINDOW.fill(BACKGROUND)
-    WINDOW.blit(bg,(0 -CameraX,0 -CameraY))
-    WINDOW.blit(printCharacter, (characterX, characterY))
+
 
     #Collision loop checks for pipe collison
     for x,y, in collisionDict.items():
@@ -441,7 +445,6 @@ def game_screen(lives):
         CameraX = CameraX - cameraSpeed
       elif(characterX < pipe1X + 95 and characterX > pipe1X - 14):
         isGround = False
-        #marioJumpVelocity = -21
         if(characterY == pipe1Y - pipe1H):
           marioJumpVelocity = -23
         if not (keys[K_SPACE] ) and characterY > pipe1Y - pipe1H:
@@ -452,6 +455,17 @@ def game_screen(lives):
         characterX = characterX + marioSpeed
         CameraX = CameraX + cameraSpeed
 
+    if(characterX < 2530 -CameraX + 95 and characterX > 2530 -CameraX - 14):
+      if characterY > 250:
+        if(keys[K_DOWN]):
+          isPipe = True
+          CameraX = -1000
+          characterX = 60
+          characterY = 0
+    if isPipe == True:
+      CameraX = -1000
+      if characterX < 40:
+        characterX = characterX + cameraSpeed
     #Calculations for holes
     for x,y in deathDict.items():
       holeX = y[0] - CameraX
@@ -460,23 +474,31 @@ def game_screen(lives):
         looping = False
         HoleTouch(characterX, characterY, CameraX, CameraY)
         return 'death'
-        
-    #all goomba calculations including death and jump
-    goombXCalc = goombXCalc + 1 #goomba Count in order to calc x value (allows movement)
-    if goombaDeath == False:
-      death = Goomba(CameraX, CameraY, goombXCalc, characterX, characterY)
-      if (death == 'jump'):
-        goombaDeath = True
-        marioJumpVelocity = jumpStrength
-      if (death == 'true'):
-        return 'death'
+    
+ 
 
     #Win condition
     if characterX > goalX - CameraX:
       looping = False
       flagpole(characterY, characterX, CameraX, CameraY)
       return 'menu'
+    
+    WINDOW.fill(BACKGROUND)
+    WINDOW.blit(bg,(0 -CameraX,0 -CameraY))
+    if isPipe:
+      WINDOW.blit(Pipes,(0 ,-152))
+    WINDOW.blit(printCharacter, (characterX, characterY))
+    #NEEDS TO BE AFTER BLIT
+    #all goomba calculations including death and jump 
+    goombXCalc = goombXCalc + 1 #goomba Count in order to calc x value (allows movement)
 
+    if goombaDeath == False and  goombXCalc < 900:
+      death = Goomba(CameraX, CameraY, goombXCalc, characterX, characterY)
+      if (death == 'jump'):
+        goombaDeath = True
+        marioJumpVelocity = jumpStrength
+      if (death == 'true'):
+        return 'death'
     #need to be last 2 lines
     #updates the screen
     pygame.display.flip()
