@@ -360,14 +360,13 @@ def game_screen(lives):
           CameraX = CameraX - cameraSpeed
         if (count < 5):
           printCharacter = marioRun1
-        else:
-          if ( count < 10):
-            printCharacter = middleRun
-          else:
-            if ( count < 15):
-              printCharacter = marioRun3
-            else: 
-              count = 0
+        elif( count < 10):
+          printCharacter = middleRun
+        elif ( count < 15):
+          printCharacter = marioRun3
+        else: 
+          printCharacter = marioRun3
+          count = 0
         if(keys[K_LSHIFT]):
             characterX = characterX + (marioSpeed * 2)
             CameraX += cameraSpeed + 4
@@ -414,7 +413,7 @@ def game_screen(lives):
           printCharacter = marioJumpLeft
         else:
           printCharacter = marioJump
-    elif (characterY < 570 and isGround == True): #NEEDS TO BE CHANGED Impliment A GROUND
+    elif (characterY < 570 and isGround == True):
       characterY = characterY - marioJumpVelocity
     if characterY > 570:
          characterY = 570
