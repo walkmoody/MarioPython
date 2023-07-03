@@ -437,14 +437,14 @@ def game_screen(lives):
       pipe1X = y[0] - CameraX
       pipe1Y = 600
       pipe1H = y[1]
-      if( characterX > pipe1X - 15 and characterX < pipe1X + 15 and characterY > pipe1Y - pipe1H and (keys[K_RIGHT] or keys[K_d])) or (characterX < pipe1X + 115 and characterX > pipe1X - 85 and characterY > pipe1Y - pipe1H and characterY > pipe1Y - pipe1H and (keys[K_LEFT] or keys[K_a])):
-        if characterX > pipe1X - 15 and characterX < pipe1X + 15 :
+      if( characterX > pipe1X -30 and characterX < pipe1X and characterY > pipe1Y - pipe1H and (keys[K_RIGHT] or keys[K_d])) or (characterX < pipe1X + 115 and characterX > pipe1X - 85 and characterY > pipe1Y - pipe1H and characterY > pipe1Y - pipe1H and (keys[K_LEFT] or keys[K_a])):
+        if characterX > pipe1X - 30 and characterX < pipe1X  :
           characterX = characterX - marioSpeed
           CameraX = CameraX - cameraSpeed
-        if characterX < pipe1X + 115 and characterX > pipe1X - 85:
+        if characterX < pipe1X + 115 and characterX > pipe1X - 85: # second half of the pipe (pipe are around 100 x)
           characterX = characterX + marioSpeed
           CameraX = CameraX + cameraSpeed
-      elif(characterX > pipe1X -15 and characterX < pipe1X + 100):
+      elif(characterX > pipe1X - 15 and characterX < pipe1X + 100):
         isGround = False
         if(characterY == pipe1Y - pipe1H):
           marioJumpVelocity = -23
