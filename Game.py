@@ -312,6 +312,7 @@ def game_screen(lives):
   #Jump Strength
   marioJumpVelocity = -23
   jumpStrength = 22
+  jumpActive = False # makes it so player cant jump multiple times
   #Camera
   CameraX, CameraY= 0, 0
   #allows for mario Run animation
@@ -411,7 +412,8 @@ def game_screen(lives):
           if(keys[K_LSHIFT]):
             characterX = characterX - (marioSpeed * 2)    
     if (keys[K_SPACE] and marioJumpVelocity < -jumpStrength) :
-        marioJumpVelocity = jumpStrength
+        if jumpActive == True:
+          marioJumpVelocity = jumpStrength
     if marioJumpVelocity >= -jumpStrength :
         characterY = characterY - marioJumpVelocity
         marioJumpVelocity = marioJumpVelocity - 1
@@ -423,7 +425,11 @@ def game_screen(lives):
       characterY = characterY - marioJumpVelocity
     if characterY > 570:
          characterY = 570
-
+    if marioJumpVelocity >= -jumpStrength : # attmempt to fix multiple mario JUMPS
+      jumpActive = False
+    else: 
+      jumpActive = True
+    
     #Animation Test (or hidden Feature: emote)
     if (keys[K_m]):
         printCharacter = marioRun1
