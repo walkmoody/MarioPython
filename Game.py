@@ -437,10 +437,14 @@ def game_screen(lives):
       pipe1X = y[0] - CameraX
       pipe1Y = 600
       pipe1H = y[1]
-      if(characterX < pipe1X + 15 and characterX > pipe1X - 15 and characterY < pipe1Y and characterY > pipe1Y - pipe1H and (keys[K_RIGHT] or keys[K_d])):
-        characterX = characterX - marioSpeed
-        CameraX = CameraX - cameraSpeed
-      elif(characterX < pipe1X + 95 and characterX > pipe1X - 14):
+      if( characterX > pipe1X - 15 and characterX < pipe1X + 15 and characterY > pipe1Y - pipe1H and (keys[K_RIGHT] or keys[K_d])) or (characterX < pipe1X + 115 and characterX > pipe1X - 85 and characterY > pipe1Y - pipe1H and characterY > pipe1Y - pipe1H and (keys[K_LEFT] or keys[K_a])):
+        if characterX > pipe1X - 15 and characterX < pipe1X + 15 :
+          characterX = characterX - marioSpeed
+          CameraX = CameraX - cameraSpeed
+        if characterX < pipe1X + 115 and characterX > pipe1X - 85:
+          characterX = characterX + marioSpeed
+          CameraX = CameraX + cameraSpeed
+      elif(characterX > pipe1X -15 and characterX < pipe1X + 100):
         isGround = False
         if(characterY == pipe1Y - pipe1H):
           marioJumpVelocity = -23
@@ -448,9 +452,7 @@ def game_screen(lives):
           characterY = pipe1Y - pipe1H
       else:
         isGround = True
-      if(characterX < pipe1X + 15 + 100  and characterX > pipe1X - 15 + 100 and characterY < pipe1Y and characterY > pipe1Y - pipe1H and (keys[K_LEFT] or keys[K_a]) ):
-        characterX = characterX + marioSpeed
-        CameraX = CameraX + cameraSpeed
+
     #allows the player to go into 4th pipe
     if(characterX < 2530 -CameraX + 95 and characterX > 2530 -CameraX - 14):
       if characterY > 250:
