@@ -30,7 +30,6 @@ def menu_screen ():
  
  
   while looping :
-    # Get inputs
     for event in pygame.event.get() :
         if event.type == QUIT :
             pygame.quit()
