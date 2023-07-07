@@ -57,7 +57,7 @@ marioDeath = pygame.transform.scale(marioDeath, (55, 55))
 pygame.display.set_caption('Mario')
 
 fontObj = pygame.font.Font(None, 32)
-fontObj = pygame.font.SysFont('courier', 32)
+fontObj = pygame.font.SysFont('freesansbold.ttf', 32)
 
 def splash_screen():
    WINDOW.fill(OPENINGBACKGROUND)
@@ -72,17 +72,17 @@ def menu_screen ():
   action = 'game'
   font = pygame.font.Font('freesansbold.ttf', 32)
 
-  menuItem1 = font.render('Instructions - i', True, TEXTCOLOUR)
-  menuItem2 = font.render('Play Game - p or SPACE', True, TEXTCOLOUR)
-  menuItem3 = font.render('Quit - q', True, TEXTCOLOUR)
+  menuItem1 = font.render('INSTRUCTIONS - I', True, WHITE)
+  menuItem2 = font.render('PLAY GAME - SPACE', True, WHITE)
+  menuItem3 = font.render('QUIT - Q', True, WHITE)
  
   menuItem1Rect = menuItem1.get_rect()
   menuItem2Rect = menuItem2.get_rect()
   menuItem3Rect = menuItem3.get_rect()
  
-  menuItem1Rect.topleft = (WINDOW_WIDTH/4, 350)
-  menuItem2Rect.topleft = (WINDOW_WIDTH/4, 400)
-  menuItem3Rect.topleft = (WINDOW_WIDTH/4, 450)
+  menuItem1Rect.topleft = (WINDOW_WIDTH/3, 350)
+  menuItem2Rect.topleft = (WINDOW_WIDTH/3, 400)
+  menuItem3Rect.topleft = (WINDOW_WIDTH/3, 450)
  
  
   while looping :
@@ -109,6 +109,7 @@ def menu_screen ():
     WINDOW.blit(menuItem1, menuItem1Rect)
     WINDOW.blit(menuItem2, menuItem2Rect)
     WINDOW.blit(menuItem3, menuItem3Rect)
+    WINDOW.blit(mario,(0,570))
     WINDOW.blit(SuperMarioBros, (WINDOW_WIDTH/4,47))
     
     pygame.display.update()
