@@ -33,7 +33,6 @@ WHITE = (255, 255, 255)
 RED = (255, 30, 70)
 BLUE = (10, 20, 200)
 GREEN = (50, 230, 40)
-CHARACTER = (255, 30, 70) # Change color rn it is red
 WINDOW = pygame.display.set_mode((WINDOW_WIDTH, WINDOW_HEIGHT))
 TEXTCOLOUR = (0, 0, 0)
 
