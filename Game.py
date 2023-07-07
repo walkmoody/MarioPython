@@ -117,8 +117,13 @@ def menu_screen ():
     fpsClock.tick(FPS)
   return action
 
-def Pause():
+def Pause(CameraX, characterX, printCharacter, characterY):
   looping = True
+  font = pygame.font.Font('freesansbold.ttf', 40)
+
+  menuItem1 = font.render('PAUSED PRESS W TO CONTINUE', True, WHITE)
+  menuItem1Rect = menuItem1.get_rect()
+  menuItem1Rect.topleft = (WINDOW_WIDTH/6, 350)
 
   while looping:
     for event in pygame.event.get() :
@@ -126,11 +131,11 @@ def Pause():
         pygame.quit()
         sys.exit()
     keys = pygame.key.get_pressed()
-    print("test")
+    
     if(keys[K_w]):
        return
-    WINDOW.blit(BACKGROUND)
-    
+    WINDOW.blit(menuItem1, menuItem1Rect)
+
     pygame.display.update()
     
     fpsClock.tick(FPS)
@@ -345,8 +350,8 @@ def game_screen(lives):
       return 'quit'
     #FIXME PAUSE SCREEN
     if (keys[K_p]):
-      looping = False
-      Pause()
+      looping = False 
+      Pause(CameraX, characterX, printCharacter, characterY)
       looping = True
       print('pause')
     #mario speed and camera speed need to be different
@@ -469,7 +474,6 @@ def game_screen(lives):
     if isPipe == True:
       CameraX = -1000
       blockHeight = 390
-      print(characterX)
       if characterX < 40: # collision for left wall
         characterX = characterX + cameraSpeed - marioSpeed
       if (characterX > 135 and characterX < 150 and characterY > blockHeight) or (characterX > 670 and characterX < 710 and characterY > blockHeight):
