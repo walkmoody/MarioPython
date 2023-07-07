@@ -1,6 +1,5 @@
-import pygame, sys, random, time, math
+import pygame, sys
 from pygame.locals import *
-import Functions
 from Functions import *
 pygame.init()
 
@@ -104,9 +103,8 @@ def game_screen(lives):
     #FIXME PAUSE SCREEN
     if (keys[K_p]):
       looping = False 
-      Pause(CameraX, characterX, printCharacter, characterY)
+      Pause()
       looping = True
-      print('pause')
     #mario speed and camera speed need to be different
     marioSpeed = 1
     cameraSpeed = 8

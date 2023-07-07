@@ -1,10 +1,7 @@
-import pygame, sys, random, time, math
+import pygame, sys
 from pygame.locals import *
-import Functions
-from Functions import *
-import Menus
+#from Functions import *
 from Menus import *
-import GameMovement
 from GameMovement import *
 pygame.init()
 
@@ -13,11 +10,9 @@ def main () :
   looping = True
 
   screen = 'splash'
-  winner = '' #not sure if I want to implemnet 
   lives = 4 #Change if need more lives
 
   while looping :
-    # Get inputs
     for event in pygame.event.get() :
       if event.type == QUIT :
         pygame.quit()
