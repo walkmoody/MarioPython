@@ -3,7 +3,7 @@ from pygame.locals import *
 from Menus import *
 from GameMovement import *
 pygame.init()
-
+#TODO add classes to game movement in order to clean up code
 # The main function that controls the game
 def main () :
   looping = True
