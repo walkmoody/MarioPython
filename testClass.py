@@ -6,8 +6,9 @@ from Variables import *
 from marioClass import *
 pygame.init()
 
-def testScreen():
+def game_screen(lives):
     player = marioClass
+    goombKill = ''
     while marioClass.looping:
         for event in pygame.event.get() :
             if event.type == QUIT :
@@ -27,6 +28,11 @@ def testScreen():
         if player.isPipe:
             WINDOW.blit(Pipes,(0 ,-152))
         WINDOW.blit(marioClass.printCharacter, (player.characterX, player.characterY))
+        if goombKill != 'goombdead':
+            goombKill =player.goomba()
+            if (goombKill == 'death'):
+                    marioClass.looping = False
+                    return 'death'
         pygame.display.flip()
         pygame.display.update()
     

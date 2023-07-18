@@ -9,7 +9,7 @@ pygame.init()
 def main () :
   looping = True
 
-  screen = 'test'
+  screen = 'splash'
   lives = 4 #Change if need more lives
 
   while looping :
@@ -25,8 +25,7 @@ def main () :
     elif screen == 'game' or screen == 'death':
       while(screen == 'game' or screen == 'death'):
         if screen == 'game':
-          #screen = game_screen(lives)
-          print("Remove")
+          screen = game_screen(lives)
         lives -= 1
         if screen == 'death':
            screen = death(lives)
@@ -34,8 +33,6 @@ def main () :
       screen = game_over_screen()
     elif screen == 'instructions' :
       screen = instructions_screen() 
-    elif screen == 'test':
-      screen = testScreen()
     else :
       screen = goodbye_screen()
 

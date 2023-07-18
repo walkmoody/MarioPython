@@ -108,6 +108,10 @@ class marioClass:
                     marioClass.CameraX = -1000
                     marioClass.characterX = 60
                     marioClass.characterY = 0
+        if marioClass.characterX > marioClass.goalX - marioClass.CameraX:
+            marioClass.looping = False
+            flagpole(marioClass.characterY, marioClass.characterX, marioClass.CameraX, marioClass.CameraY)
+            return 'menu'
         
     def pipe(keys):
         marioClass.CameraX = -1000
@@ -162,90 +166,21 @@ class marioClass:
                 marioClass.looping = False
                 HoleTouch(marioClass.characterX, marioClass.characterY, marioClass.CameraX, marioClass.CameraY)
                 return 'death'
+            
+    def goomba():
+        marioClass.goombXCalc =  marioClass.goombXCalc + 1 #goomba Count in order to calc x value (allows movement)
+        if marioClass.goombaDeath == False and   marioClass.goombXCalc < 900:
+            death = Goomba(marioClass.CameraX, marioClass.CameraY, marioClass.goombXCalc, marioClass.characterX, marioClass.characterY)
+            if (death == 'jump'):
+                marioClass.goombaDeath = True
+                marioClass.marioJumpVelocity =  marioClass.jumpStrength
+                return 'goombDead'
+            if (death == 'true'):
+                return 'death'
 
-    
-    '''''
-
-    def __init__(self, keys):
-
-       
-       
-        if marioJumpVelocity >= -jumpStrength :
-            characterY = characterY - marioJumpVelocity
-            marioJumpVelocity = marioJumpVelocity - 1
-            if (keys[K_LEFT] or keys[K_a]) :
-            printCharacter = marioJumpLeft
-            else:
-            printCharacter = marioJump
-        elif (characterY < 570 and isGround == True):
-        characterY = characterY - marioJumpVelocity
-        if characterY > 570:
-            characterY = 570
-        if marioJumpVelocity >= -jumpStrength : # attmempt to fix multiple mario JUMPS
-        jumpActive = False
-        else: 
-        jumpActive = True
-        
-        #Animation Test (or hidden Feature: emote)
-       
-       
-        
-
-        #allows the player to go into 4th pipe
-        if(characterX < 2530 -CameraX + 95 and characterX > 2530 -CameraX - 14):
-        if characterY > 250:
-            if(keys[K_DOWN]):
-            isPipe = True
-            CameraX = -1000
-            characterX = 60
-            characterY = 0
-        #if player is in the fourth pipe it no longer moves camera
-        if isPipe == True:
-        CameraX = -1000
-        blockHeight = 390
-        if characterX < 40: # collision for left wall
-            characterX = characterX + cameraSpeed - marioSpeed
-        if (characterX > 135 and characterX < 150 and characterY > blockHeight) or (characterX > 670 and characterX < 710 and characterY > blockHeight):
-            if characterX > 135 and characterX < 150 :
-            characterX = characterX - cameraSpeed
-            if characterX > 670 and characterX < 710:
-            characterX = characterX + cameraSpeed
-        elif(characterX > 135 and characterX < 700):
-            isGround = False
-            if(characterY == blockHeight):
-            marioJumpVelocity = -23
-            if not (keys[K_SPACE] ) and characterY > blockHeight:
-            characterY = blockHeight
-            else:
-            isGround = True
-        if characterX > 850:
-            isPipe = False
-            CameraX = 7220
-            characterX = 120
-            characterY = 580
-        #Calculations for holes
-        for x,y in deathDict.items():
-        holeX = y[0] - CameraX
-        holeEnd = y[0] + 100  - CameraX
-        if(characterX > holeX and characterX < holeEnd and characterY > 569):
-            looping = False
-            HoleTouch(characterX, characterY, CameraX, CameraY)
-            return 'death'
-        
-        #Win condition
-        if characterX > goalX - CameraX:
-            looping = False
-            flagpole(characterY, characterX, CameraX, CameraY)
-            return 'menu'
-
-
-    ###
-
-    '''
-    #character spawn location
     #Variables
     looping = True
-    characterX = 0
+    characterX = 20
     characterY = 570
     #Jump Strength
     marioJumpVelocity = -23
