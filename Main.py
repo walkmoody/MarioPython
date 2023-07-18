@@ -1,14 +1,15 @@
 import pygame, sys
 from pygame.locals import *
 from Menus import *
-from GameMovement import *
+#from GameMovement import *
+from testClass import *
 pygame.init()
 #TODO add classes to game movement in order to clean up code
 # The main function that controls the game
 def main () :
   looping = True
 
-  screen = 'splash'
+  screen = 'test'
   lives = 4 #Change if need more lives
 
   while looping :
@@ -32,6 +33,8 @@ def main () :
       screen = game_over_screen()
     elif screen == 'instructions' :
       screen = instructions_screen() 
+    elif screen == 'test':
+      screen = testScreen()
     else :
       screen = goodbye_screen()
 

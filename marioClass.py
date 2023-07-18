@@ -6,76 +6,83 @@ from Variables import *
 pygame.init()
 
 class marioClass:
-    
+     #character spawn location
+    characterX = 0
+    characterY = 570
+    #Jump Strength
+    marioJumpVelocity = -23
+    jumpStrength = 22
+    jumpActive = False # makes it so player cant jump multiple times
+    #Camera
+    CameraX, CameraY= 0, 0
+    #allows for mario Run animation
+    printCharacter = mario
+    count, countLeft = 0, 0
+    #Goomba
+    goombXCalc = 0
+    goombaDeath = False
+    #add lives to screen
+    isGround = True
+    right = True
+    collisionDict = Collision()
+    deathDict = Holes()
+    goalX = 8900 # 8850
+    isPipe = False
+    marioSpeed = 1
+    cameraSpeed = 8
+
+    def move(keys):
+        if (keys[K_RIGHT] or keys[K_d]):
+            rightMove()
+
+    def right():
+        right = True # May be removed
+        characterX = characterX + marioSpeed
+        printCharacter = mario
+        CameraX += cameraSpeed
+        count += 1
+        if CameraX > 8380 or isPipe:
+            characterX = characterX - marioSpeed + cameraSpeed
+        if CameraX > 8380:
+            CameraX = CameraX - cameraSpeed
+        if (count < 5):
+            printCharacter = marioRun1
+        elif( count < 10):
+            printCharacter = middleRun
+        elif ( count < 15):
+            printCharacter = marioRun3
+        else: 
+            printCharacter = marioRun3
+            count = 0
+        if(keys[K_LSHIFT]):
+            characterX = characterX + (marioSpeed * 2)
+            CameraX += cameraSpeed + 4
+
+    '''''
 
     def __init__(self, keys):
-        #character spawn location
-        characterX = 0
-        characterY = 570
-        #Jump Strength
-        marioJumpVelocity = -23
-        jumpStrength = 22
-        jumpActive = False # makes it so player cant jump multiple times
-        #Camera
-        CameraX, CameraY= 0, 0
-        #allows for mario Run animation
-        printCharacter = mario
-        count, countLeft = 0, 0
-        #Goomba
-        goombXCalc = 0
-        goombaDeath = False
-        #add lives to screen
-        isGround = True
-        right = True
-        collisionDict = Collision()
-        deathDict = Holes()
-        goalX = 8900 # 8850
-        isPipe = False
-        marioSpeed = 1
-        cameraSpeed = 8
+        
     
-        if (keys[K_RIGHT] or keys[K_d]):
-            right = True
-            characterX = characterX + marioSpeed
-            printCharacter = mario
-            CameraX += cameraSpeed
-            count += 1
-            if CameraX > 8380 or isPipe:
-                characterX = characterX - marioSpeed + cameraSpeed
-            if CameraX > 8380:
-                CameraX = CameraX - cameraSpeed
-            if (count < 5):
-                printCharacter = marioRun1
-            elif( count < 10):
-                printCharacter = middleRun
-            elif ( count < 15):
-                printCharacter = marioRun3
-            else: 
-                printCharacter = marioRun3
-                count = 0
-            if(keys[K_LSHIFT]):
-                characterX = characterX + (marioSpeed * 2)
-                CameraX += cameraSpeed + 4
-
+        
         if (keys[K_LEFT] or keys[K_a]) :
             right = False
             characterX = characterX - marioSpeed
             printCharacter = pygame.transform.flip(mario, True, False)
             if (characterX < WINDOW_WIDTH/5):
-                CameraX -= cameraSpeed 
+            CameraX -= cameraSpeed 
             else:
-                characterX = characterX + marioSpeed - cameraSpeed
+            characterX = characterX + marioSpeed - cameraSpeed
             if isPipe == True and characterX < WINDOW_WIDTH/5:
-                characterX = characterX + marioSpeed - cameraSpeed + marioSpeed
+            characterX = characterX + marioSpeed - cameraSpeed + marioSpeed
             countLeft += 1
             if (countLeft < 5):
-                printCharacter = pygame.transform.flip(marioRun1, True, False)
+            printCharacter = pygame.transform.flip(marioRun1, True, False)
             elif( countLeft < 10):
                 printCharacter = pygame.transform.flip(middleRun, True, False)
             elif ( countLeft < 15):
-                printCharacter = pygame.transform.flip(marioRun3, True, False)
+            printCharacter = pygame.transform.flip(marioRun3, True, False)
             else: 
-                countLeft = 0
+            countLeft = 0
             if(keys[K_LSHIFT]):
                 characterX = characterX - (marioSpeed * 2)
                 CameraX -= cameraSpeed - 4
@@ -83,23 +90,23 @@ class marioClass:
         if (characterX  < -4 and isPipe == False) : # stops mario from going to the left off screeb
             characterX = characterX + marioSpeed
         if (CameraX < 0 and isPipe == False) :
-            CameraX = CameraX + cameraSpeed
+        CameraX = CameraX + cameraSpeed
         if (characterX  > WINDOW_WIDTH/5 and CameraX < 8375 and not isPipe): # Stops mario from running off screen right
             characterX = characterX - marioSpeed
             if(keys[K_LSHIFT]):
-                characterX = characterX - (marioSpeed * 2)
+            characterX = characterX - (marioSpeed * 2)
         if(characterX > WINDOW_WIDTH) :
             characterX = characterX - marioSpeed
             if(keys[K_LSHIFT]):
                 characterX = characterX - (marioSpeed * 2)    
         if (keys[K_SPACE] and marioJumpVelocity < -jumpStrength) :
             if jumpActive == True:
-                marioJumpVelocity = jumpStrength
+            marioJumpVelocity = jumpStrength
         if marioJumpVelocity >= -jumpStrength :
             characterY = characterY - marioJumpVelocity
             marioJumpVelocity = marioJumpVelocity - 1
             if (keys[K_LEFT] or keys[K_a]) :
-                printCharacter = marioJumpLeft
+            printCharacter = marioJumpLeft
             else:
             printCharacter = marioJump
         elif (characterY < 570 and isGround == True):
@@ -107,9 +114,9 @@ class marioClass:
         if characterY > 570:
             characterY = 570
         if marioJumpVelocity >= -jumpStrength : # attmempt to fix multiple mario JUMPS
-            jumpActive = False
+        jumpActive = False
         else: 
-            jumpActive = True
+        jumpActive = True
         
         #Animation Test (or hidden Feature: emote)
         if (keys[K_m]):
@@ -117,7 +124,7 @@ class marioClass:
         if (keys[K_n]):
             printCharacter = middleRun
         if (keys[K_o]):
-            printCharacter = marioRun3
+        printCharacter = marioRun3
         
         #Collision loop checks for pipe collison
         for x,y, in collisionDict.items():
@@ -186,5 +193,6 @@ class marioClass:
             return 'menu'
 
 
+    ###
 
-
+    '''

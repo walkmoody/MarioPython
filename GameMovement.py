@@ -6,6 +6,30 @@ from marioClass import *
 pygame.init()
 
 def game_screen(lives): 
+  #character spawn location
+  characterX = 0
+  characterY = 570
+  #Jump Strength
+  marioJumpVelocity = -23
+  jumpStrength = 22
+  jumpActive = False # makes it so player cant jump multiple times
+  #Camera
+  CameraX, CameraY= 0, 0
+  #allows for mario Run animation
+  printCharacter = mario
+  count, countLeft = 0, 0
+  #Goomba
+  goombXCalc = 0
+  goombaDeath = False
+  #add lives to screen
+  isGround = True
+  right = True
+  collisionDict = Collision()
+  deathDict = Holes()
+  goalX = 8900 # 8850
+  isPipe = False
+  marioSpeed = 1
+  cameraSpeed = 8
   #allows game to run
   looping = True
   #marioClass(keys)
