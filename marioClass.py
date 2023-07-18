@@ -6,7 +6,7 @@ from Variables import *
 pygame.init()
 
 class marioClass:
-     #character spawn location
+    #character spawn location
     characterX = 0
     characterY = 570
     #Jump Strength
@@ -30,34 +30,74 @@ class marioClass:
     isPipe = False
     marioSpeed = 1
     cameraSpeed = 8
+    keys = pygame.key.get_pressed()
 
     def move(keys):
         if (keys[K_RIGHT] or keys[K_d]):
-            rightMove()
+            marioClass.rightMove()
+        if (keys[K_LEFT] or keys[K_a]):
+            marioClass.leftMove()
+        if (keys[K_SPACE] and marioClass.marioJumpVelocity < -marioClass.jumpStrength) :
+            if marioClass.jumpActive == False: # CHANGE BACK TO TRUE IF NEEDED
+                marioClass.marioJumpVelocity = marioClass.jumpStrength
+        if marioClass.marioJumpVelocity >= -marioClass.jumpStrength:
+            marioClass.jump()
 
-    def right():
+    def jump():
+        marioClass.characterY = marioClass.characterY - marioClass.marioJumpVelocity
+        marioClass.marioJumpVelocity = marioClass.marioJumpVelocity - 1
+        if (marioClass.keys[K_LEFT] or marioClass.keys[K_a]) :
+            marioClass.printCharacter = marioJumpLeft
+        else:
+            marioClass.printCharacter = marioJump
+
+    def rightMove():
         right = True # May be removed
-        characterX = characterX + marioSpeed
-        printCharacter = mario
-        CameraX += cameraSpeed
-        count += 1
-        if CameraX > 8380 or isPipe:
-            characterX = characterX - marioSpeed + cameraSpeed
-        if CameraX > 8380:
-            CameraX = CameraX - cameraSpeed
-        if (count < 5):
-            printCharacter = marioRun1
-        elif( count < 10):
-            printCharacter = middleRun
-        elif ( count < 15):
-            printCharacter = marioRun3
+        marioClass.characterX = marioClass.characterX + marioClass.marioSpeed
+        marioClass.printCharacter = mario
+        marioClass.CameraX += marioClass.cameraSpeed
+        marioClass.count += 1
+        if marioClass.CameraX > 8380 or marioClass.isPipe:
+            marioClass.characterX =marioClass. characterX - marioClass.marioSpeed + marioClass.cameraSpeed
+        if marioClass.CameraX > 8380:
+            marioClass.CameraX = marioClass.CameraX - marioClass.cameraSpeed
+        if (marioClass.count < 5):
+            marioClass.printCharacter = marioRun1
+        elif( marioClass.count < 10):
+            marioClass.printCharacter = middleRun
+        elif ( marioClass.count < 15):
+            marioClass.printCharacter = marioRun3
         else: 
-            printCharacter = marioRun3
-            count = 0
-        if(keys[K_LSHIFT]):
-            characterX = characterX + (marioSpeed * 2)
-            CameraX += cameraSpeed + 4
+            marioClass.printCharacter = marioRun3
+            marioClass.count = 0
+        if(marioClass.keys[K_LSHIFT]):
+            marioClass.characterX = marioClass.characterX + (marioClass.marioSpeed * 2)
+            marioClass.CameraX += marioClass.cameraSpeed + 4
 
+    def leftMove():
+        marioClass.right = False
+        marioClass.characterX = marioClass.characterX - marioClass.marioSpeed
+        marioClass.printCharacter = pygame.transform.flip(mario, True, False)
+        if (characterX < WINDOW_WIDTH/5):
+            marioClass.CameraX -= marioClass.cameraSpeed 
+        else:
+            marioClass.characterX = marioClass.characterX + marioClass.marioSpeed - marioClass.cameraSpeed
+        if  marioClass.isPipe == True and characterX < WINDOW_WIDTH/5:
+            marioClass.characterX = marioClass.characterX + marioClass.marioSpeed - marioClass.cameraSpeed + marioClass.marioSpeed
+        marioClass.countLeft += 1
+        if (marioClass.countLeft < 5):
+            marioClass.printCharacter = pygame.transform.flip(marioRun1, True, False)
+        elif( marioClass.countLeft < 10):
+            marioClass.printCharacter = pygame.transform.flip(middleRun, True, False)
+        elif ( marioClass.countLeft < 15):
+            marioClass.printCharacter = pygame.transform.flip(marioRun3, True, False)
+        else: 
+            marioClass.countLeft = 0
+        if(marioClass.keys[K_LSHIFT]):
+            marioClass.characterX = marioClass.characterX - (marioClass.marioSpeed * 2)
+            marioClass.CameraX -= marioClass.cameraSpeed - 4
+
+    
     '''''
 
     def __init__(self, keys):
@@ -99,9 +139,7 @@ class marioClass:
             characterX = characterX - marioSpeed
             if(keys[K_LSHIFT]):
                 characterX = characterX - (marioSpeed * 2)    
-        if (keys[K_SPACE] and marioJumpVelocity < -jumpStrength) :
-            if jumpActive == True:
-            marioJumpVelocity = jumpStrength
+       
         if marioJumpVelocity >= -jumpStrength :
             characterY = characterY - marioJumpVelocity
             marioJumpVelocity = marioJumpVelocity - 1

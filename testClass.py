@@ -17,8 +17,9 @@ def testScreen():
         keys = pygame.key.get_pressed()
         marioClass.move(keys)
         WINDOW.fill(BACKGROUND)
+        WINDOW.blit(bg,(0 -player.CameraX,0 -player.CameraY))
 
-
+        WINDOW.blit(marioClass.printCharacter, (player.characterX, player.characterY))
         pygame.display.flip()
         pygame.display.update()
     
