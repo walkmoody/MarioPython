@@ -1,9 +1,9 @@
 import pygame, sys
 from pygame.locals import *
-from Menus import *
-from Functions import *
-from Variables import *
-from marioClass import *
+from files.Menus import *
+from files.Functions import *
+from files.Variables import *
+from files.marioClass import *
 pygame.init()
 
 def game_screen(lives):

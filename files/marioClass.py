@@ -1,8 +1,8 @@
 import pygame, sys
 from pygame.locals import *
-from Menus import *
-from Functions import *
-from Variables import *
+from files.Menus import *
+from files.Functions import *
+from files.Variables import *
 pygame.init()
 
 class marioClass:

@@ -1,6 +1,6 @@
 import pygame, sys, time
 from pygame.locals import *
-from Variables import *
+from files.Variables import *
 pygame.init()
 
 def Pause():

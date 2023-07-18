@@ -1,8 +1,7 @@
 import pygame, sys
 from pygame.locals import *
-from Menus import *
-#from GameMovement import *
-from testClass import *
+from files.Menus import *
+from files.testClass import *
 pygame.init()
 #TODO add classes to game movement in order to clean up code
 # The main function that controls the game
