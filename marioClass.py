@@ -18,16 +18,6 @@ class marioClass:
             marioClass.rightMove()
         if (keys[K_LEFT] or keys[K_a]):
             marioClass.leftMove()
-        if (keys[K_SPACE] and marioClass.marioJumpVelocity < -marioClass.jumpStrength) :
-            if marioClass.jumpActive == True:
-                marioClass.marioJumpVelocity = marioClass.jumpStrength
-        if marioClass.marioJumpVelocity >= -marioClass.jumpStrength : # attmempt to fix multiple mario JUMPS
-            marioClass.jumpActive = False
-        else: 
-            marioClass.jumpActive = True
-        if marioClass.marioJumpVelocity >= -marioClass.jumpStrength:
-            marioClass.jump()
-            
         if (keys[K_m]):
             marioClass.printCharacter = marioRun1
         if (keys[K_n]):
@@ -35,13 +25,21 @@ class marioClass:
         if (keys[K_o]):
             marioClass.printCharacter = marioRun3
         
-    def jump():
-        marioClass.characterY = marioClass.characterY - marioClass.marioJumpVelocity
-        marioClass.marioJumpVelocity = marioClass.marioJumpVelocity - 1
-        if (marioClass.keys[K_LEFT] or marioClass.keys[K_a]) :
-            marioClass.printCharacter = marioJumpLeft
-        else:
-            marioClass.printCharacter = marioJump
+    def jump(keys):
+        if (keys[K_SPACE] and marioClass.marioJumpVelocity < -marioClass.jumpStrength) :
+                marioClass.marioJumpVelocity = marioClass.jumpStrength
+        if marioClass.marioJumpVelocity >= -marioClass.jumpStrength:
+            marioClass.characterY = marioClass.characterY - marioClass.marioJumpVelocity
+            marioClass.marioJumpVelocity = marioClass.marioJumpVelocity - 1
+            if (marioClass.keys[K_LEFT] or marioClass.keys[K_a]) :
+                marioClass.printCharacter = marioJumpLeft
+            else:
+                marioClass.printCharacter = marioJump
+        elif (marioClass.characterY < 570 and marioClass.isGround == True):
+            marioClass.characterY = marioClass.characterY - marioClass.marioJumpVelocity
+        if marioClass.characterY > 570:
+            marioClass.characterY = 570
+    
 
     def rightMove():
         marioClass.right = True # May be removed
@@ -90,7 +88,7 @@ class marioClass:
             marioClass.characterX = marioClass.characterX - (marioClass.marioSpeed * 2)
             marioClass.CameraX -= marioClass.cameraSpeed - 4
 
-    def checks():
+    def checks(keys):
         if (marioClass.characterX  < -4 and marioClass.isPipe == False) : # stops mario from going to the left off screeb
             marioClass.characterX = marioClass.characterX + marioClass.marioSpeed
         if (marioClass.CameraX < 0 and marioClass.isPipe == False) :
@@ -102,7 +100,38 @@ class marioClass:
         if(marioClass.characterX > WINDOW_WIDTH) :
             marioClass.characterX = marioClass.characterX - marioClass.marioSpeed
             if(marioClass.keys[K_LSHIFT]):
-                characterX = characterX - (marioClass.marioSpeed * 2)    
+                characterX = characterX - (marioClass.marioSpeed * 2)
+        if(marioClass.characterX < 2530 -marioClass.CameraX + 95 and marioClass.characterX > 2530 -marioClass.CameraX - 14):
+            if marioClass.characterY > 250:
+                if(keys[K_DOWN]):
+                    marioClass.isPipe = True
+                    marioClass.CameraX = -1000
+                    marioClass.characterX = 60
+                    marioClass.characterY = 0
+        
+    def pipe(keys):
+        marioClass.CameraX = -1000
+        blockHeight = 390
+        if marioClass.characterX < 40: # collision for left wall
+            marioClass.characterX = marioClass.characterX + marioClass.cameraSpeed - marioClass.marioSpeed
+        if (marioClass.characterX > 135 and marioClass.characterX < 150 and marioClass.characterY > blockHeight) or (marioClass.characterX > 670 and marioClass.characterX < 710 and marioClass.characterY > blockHeight):
+            if marioClass.characterX > 135 and characterX < 150 :
+                marioClass.characterX = marioClass.characterX - marioClass.cameraSpeed
+            if marioClass.characterX > 670 and marioClass.characterX < 710:
+                marioClass.characterX = marioClass.characterX + marioClass.cameraSpeed
+        elif(marioClass.characterX > 135 and marioClass.characterX < 700):
+            marioClass.isGround = False
+            if(marioClass.characterY == blockHeight):
+                marioClass.marioJumpVelocity = -23
+            if not (keys[K_SPACE] ) and marioClass.characterY > blockHeight:
+                marioClass.characterY = blockHeight
+            else:
+                marioClass.isGround = True
+        if marioClass.characterX > 850:
+            marioClass.isPipe = False
+            marioClass.CameraX = 7220
+            marioClass.characterX = 120
+            marioClass.characterY = 580
     
     def collision():
          #Collision loop checks for pipe collison
@@ -124,6 +153,15 @@ class marioClass:
             if(marioClass.characterX < pipe1X + 15 + 100  and marioClass.characterX > pipe1X - 15 + 100 and marioClass.characterY < pipe1Y and marioClass.characterY > pipe1Y - pipe1H and (marioClass.keys[K_LEFT] or marioClass.keys[K_a]) ): # pipewidth is 100
                 marioClass.characterX = marioClass.characterX + marioClass.marioSpeed
                 marioClass.CameraX = marioClass.CameraX + marioClass.cameraSpeed
+    
+    def death():
+        for x,y in marioClass.deathDict.items():
+            holeX = y[0] - marioClass.CameraX
+            holeEnd = y[0] + 100  - marioClass.CameraX
+            if(marioClass.characterX > holeX and marioClass.characterX < holeEnd and marioClass.characterY > 569):
+                marioClass.looping = False
+                HoleTouch(marioClass.characterX, marioClass.characterY, marioClass.CameraX, marioClass.CameraY)
+                return 'death'
 
     
     '''''
@@ -206,12 +244,12 @@ class marioClass:
     '''
     #character spawn location
     #Variables
+    looping = True
     characterX = 0
     characterY = 570
     #Jump Strength
     marioJumpVelocity = -23
     jumpStrength = 22
-    jumpActive = False # makes it so player cant jump multiple times
     #Camera
     CameraX, CameraY= 0, 0
     #allows for mario Run animation
