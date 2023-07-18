@@ -25,7 +25,8 @@ def main () :
     elif screen == 'game' or screen == 'death':
       while(screen == 'game' or screen == 'death'):
         if screen == 'game':
-          screen = game_screen(lives)
+          #screen = game_screen(lives)
+          print("Remove")
         lives -= 1
         if screen == 'death':
            screen = death(lives)

@@ -15,7 +15,9 @@ def testScreen():
                 pygame.quit()
                 sys.exit()
         keys = pygame.key.get_pressed()
-        marioClass.move(keys)
+        player.move(keys)
+        player.checks()
+        player.collision()
         WINDOW.fill(BACKGROUND)
         WINDOW.blit(bg,(0 -player.CameraX,0 -player.CameraY))
 
