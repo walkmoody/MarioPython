@@ -4,4 +4,10 @@ from Menus import *
 from GameMovement import *
 pygame.init()
 
+class marioClass:
+    def __init__(self):
+        
+
+
+
 
