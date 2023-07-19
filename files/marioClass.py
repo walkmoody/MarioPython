@@ -1,4 +1,4 @@
-import pygame, sys
+import pygame
 from pygame.locals import *
 from files.Menus import *
 from files.Functions import *
@@ -43,7 +43,7 @@ class marioClass:
     
 
     def rightMove():
-        marioClass.right = True # May be removed
+        marioClass.right = True
         marioClass.characterX = marioClass.characterX + marioClass.marioSpeed
         marioClass.printCharacter = mario
         marioClass.CameraX += marioClass.cameraSpeed
@@ -69,7 +69,7 @@ class marioClass:
         if (characterX < WINDOW_WIDTH/5):
             marioClass.CameraX -= marioClass.cameraSpeed 
         else:
-            marioClass.characterX = marioClass.characterX + marioClass.marioSpeed - marioClass.cameraSpeed
+            marioClass.characterX = marioClass.characterX + marioClass.marioSpeed - marioClass.cameraSpeed #Glitch right here
         if  marioClass.isPipe == True and characterX < WINDOW_WIDTH/5:
             marioClass.characterX = marioClass.characterX + marioClass.marioSpeed - marioClass.cameraSpeed + marioClass.marioSpeed
         marioClass.countLeft += 1
