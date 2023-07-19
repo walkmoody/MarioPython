@@ -31,7 +31,7 @@ class marioClass:
         if marioClass.marioJumpVelocity >= -marioClass.jumpStrength:
             marioClass.characterY = marioClass.characterY - marioClass.marioJumpVelocity
             marioClass.marioJumpVelocity = marioClass.marioJumpVelocity - 1
-            if (marioClass.keys[K_LEFT] or marioClass.keys[K_a]) :
+            if (marioClass.right == False):
                 marioClass.printCharacter = marioJumpLeft
             else:
                 marioClass.printCharacter = marioJump
@@ -138,7 +138,8 @@ class marioClass:
             marioClass.characterY = 580
     
     def collision():
-         #Collision loop checks for pipe collison
+        #TODO needs to be fixed
+        #Collision loop checks for pipe collison 
         for x,y, in marioClass.collisionDict.items():
             pipe1X = y[0] - marioClass.CameraX
             pipe1Y = 600
