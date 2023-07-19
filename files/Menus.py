@@ -126,6 +126,28 @@ def instructions_screen () : #FIXME need to change the instruction screen
     fpsClock.tick(FPS)
  
   return action
+ 
+def death(lives):
+  if lives < 0:
+    return 'game_over'
+  font = pygame.font.Font('freesansbold.ttf', 40)
+
+  text = font.render(f'{lives}', True, WHITE)
+
+  textRect = text.get_rect()
+  textRect.center = ((WINDOW_WIDTH / 2) + 50, (WINDOW_HEIGHT // 2) + 70)
+  blackRectangle = pygame.Rect((WINDOW_WIDTH / 2) + 50, (WINDOW_HEIGHT // 2) + 40 , 50, 70)
+
+ 
+  WINDOW.fill(BLACKGROUND)
+  WINDOW.blit(DeathScreen, (0,0))
+  pygame.draw.rect(WINDOW, BLACKGROUND, blackRectangle)
+  WINDOW.blit(text, textRect)
+  
+  pygame.display.update()
+  time.sleep(2) 
+
+  return 'game'
 
 def goodbye_screen(): #shows up when player quits the game, this leaves a message and exits
   font = pygame.font.Font('freesansbold.ttf', 32)
