@@ -2,11 +2,10 @@ import pygame, sys
 from pygame.locals import *
 from Functions import *
 from Variables import *
+from marioClass import *
 pygame.init()
 
 def game_screen(lives): 
-  #allows game to run
-  looping = True
   #character spawn location
   characterX = 0
   characterY = 570
@@ -29,18 +28,24 @@ def game_screen(lives):
   deathDict = Holes()
   goalX = 8900 # 8850
   isPipe = False
+  marioSpeed = 1
+  cameraSpeed = 8
+  #allows game to run
+  looping = True
+  #marioClass(keys)
   while looping :
     # Checks for orientation of player
     if(right == True):
-      printCharacter = mario
+      marioClass.printCharacter = mario
     else:
-      printCharacter = pygame.transform.flip(mario, True, False)
+      marioClass.printCharacter = pygame.transform.flip(mario, True, False)
     #allows the player to exit
     for event in pygame.event.get() :
         if event.type == QUIT :
             pygame.quit()
             sys.exit()
     keys = pygame.key.get_pressed() # gets key value
+    marioClass(keys)
     #hot key to leave the game
     if (keys[K_q]):
       return 'quit'
@@ -50,8 +55,6 @@ def game_screen(lives):
       Pause()
       looping = True
     #mario speed and camera speed need to be different
-    marioSpeed = 1
-    cameraSpeed = 8
     #MOVEMENT
     if (keys[K_RIGHT] or keys[K_d]):
         right = True
