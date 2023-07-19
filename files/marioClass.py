@@ -171,17 +171,6 @@ class marioClass:
                 HoleTouch(marioClass.characterX, marioClass.characterY, marioClass.CameraX, marioClass.CameraY)
                 return 'death'
             
-    def goomba():
-        marioClass.goombXCalc =  marioClass.goombXCalc + 1 #goomba Count in order to calc x value (allows movement)
-        if marioClass.goombaDeath == False and   marioClass.goombXCalc < 900:
-            death = Goomba(marioClass.CameraX, marioClass.CameraY, marioClass.goombXCalc, marioClass.characterX, marioClass.characterY)
-            if (death == 'jump'):
-                marioClass.goombaDeath = True
-                marioClass.marioJumpVelocity =  marioClass.jumpStrength
-                return 'goombDead'
-            if (death == 'true'):
-                return 'death'
-            
     def init():
         marioClass.looping = True
         marioClass.characterX = 20

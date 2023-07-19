@@ -4,6 +4,7 @@ from files.Menus import *
 from files.Functions import *
 from files.Variables import *
 from files.marioClass import *
+from files.goombClass import *
 pygame.init()
 
 def game_screen(lives):
@@ -30,7 +31,7 @@ def game_screen(lives):
             WINDOW.blit(Pipes,(0 ,-152))
         WINDOW.blit(marioClass.printCharacter, (player.characterX, player.characterY))
         if goombKill != 'goombdead':
-            goombKill =player.goomba()
+            goombKill = GoombaClass.goomba()
             if (goombKill == 'death'):
                     marioClass.looping = False
                     return 'death'

@@ -8,7 +8,7 @@ pygame.init()
 def main () :
   looping = True
 
-  screen = 'death'
+  screen = 'splash'
   lives = 4 #Change if need more lives
 
   while looping :
