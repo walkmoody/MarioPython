@@ -9,7 +9,8 @@ pygame.init()
 
 def game_screen(lives):
     player = marioClass
-    marioClass.init()
+    GoombaClass.init()
+    player.init()
     goombKill = ''
     while marioClass.looping:
         for event in pygame.event.get() :

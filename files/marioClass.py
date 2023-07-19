@@ -202,12 +202,9 @@ class marioClass:
     jumpStrength = 22
     #Camera
     CameraX, CameraY= 0, 0
-    #allows for mario Run animation
     printCharacter = mario
     count, countLeft = 0, 0
-    #Goomba
-    goombXCalc = 0
-    goombaDeath = False
+    #goombaDeath = False
     isGround = True
     right = True
     goalX = 8900 # 8850
