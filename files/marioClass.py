@@ -183,9 +183,6 @@ class marioClass:
         #allows for mario Run animation
         marioClass.printCharacter = mario
         marioClass.count, marioClass.countLeft = 0, 0
-        #Goomba
-        marioClass.goombXCalc = 0
-        marioClass.goombaDeath = False
         marioClass.isGround = True
         marioClass.right = True
         marioClass.goalX = 8900 # 8850

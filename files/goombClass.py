@@ -17,10 +17,10 @@ class GoombaClass:
         
     def goomba():
         GoombaClass.goombXCalc =  GoombaClass.goombXCalc + 1 #goomba Count in order to calc x value (allows movement)
-        if GoombaClass.goombaDeath == False and marioClass.goombXCalc < 900:
-            death = GoombaClass.Goomba(marioClass.CameraX, marioClass.CameraY, marioClass.goombXCalc, marioClass.characterX, marioClass.characterY)
+        if GoombaClass.goombaDeath == False and GoombaClass.goombXCalc < 900:
+            death = GoombaClass.Goomba(marioClass.CameraX, marioClass.CameraY, GoombaClass.goombXCalc, marioClass.characterX, marioClass.characterY)
             if (death == 'jump'):
-                marioClass.goombaDeath = True
+                GoombaClass.goombaDeath = True
                 marioClass.marioJumpVelocity =  marioClass.jumpStrength
                 return 'goombDead'
             if (death == 'true'):
@@ -45,7 +45,7 @@ class GoombaClass:
         WINDOW.blit(GoombaPrint, (goombaX, goombaY))
         if(characterX < goombaX + 15 and characterX > goombaX - 15 and characterY < goombaY - 5 and characterY > goombaY -30):
             return 'jump'
-        if(characterX < goombaX + 10 and characterX > goombaX - 10 and characterY == goombaY - 5):
+        if(characterX < goombaX + 14 and characterX > goombaX - 14 and characterY == goombaY - 5):
             trueState = True
             deathTest = characterY 
             death2 = 0

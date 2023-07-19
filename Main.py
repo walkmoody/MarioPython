@@ -27,8 +27,7 @@ def main () :
           screen = game_screen(lives)
         lives -= 1
         if screen == 'death':
-           screen = death(lives)
-        print(screen)
+          screen = death(lives)
     elif screen == 'game_over' :
       screen = game_over_screen()
     elif screen == 'instructions' :
