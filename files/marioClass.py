@@ -8,6 +8,7 @@ pygame.init()
 class marioClass:
 
     collisionDict = Collision()
+    deathDict = Holes()
 
     def move(keys):
         if(marioClass.right == True):
@@ -60,9 +61,6 @@ class marioClass:
         else: 
             marioClass.printCharacter = marioRun3
             marioClass.count = 0
-        if(marioClass.keys[K_LSHIFT]):
-            marioClass.characterX = marioClass.characterX + (marioClass.marioSpeed * 2)
-            marioClass.CameraX += marioClass.cameraSpeed + 4
 
     def leftMove():
         marioClass.right = False
@@ -84,9 +82,6 @@ class marioClass:
         else:
             marioClass.printCharacter = pygame.transform.flip(marioRun3, True, False)
             marioClass.countLeft = 0
-        if(marioClass.keys[K_LSHIFT]):
-            marioClass.characterX = marioClass.characterX - (marioClass.marioSpeed * 2)
-            marioClass.CameraX -= marioClass.cameraSpeed - 4
 
     def checks(keys):
         if (marioClass.characterX  < -4 and marioClass.isPipe == False) : # stops mario from going to the left off screeb
@@ -196,8 +191,6 @@ class marioClass:
     goombaDeath = False
     isGround = True
     right = True
-    
-    deathDict = Holes()
     goalX = 8900 # 8850
     isPipe = False
     marioSpeed = 1
