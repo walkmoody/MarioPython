@@ -6,7 +6,7 @@ from files.Variables import *
 pygame.init()
 
 class marioClass:
-
+        
     collisionDict = Collision()
     deathDict = Holes()
 
@@ -25,6 +25,13 @@ class marioClass:
             marioClass.printCharacter = middleRun
         if (keys[K_o]):
             marioClass.printCharacter = marioRun3
+        if (keys[K_q]):
+            return 'quit'
+        #FIXME PAUSE SCREEN
+        if (keys[K_p]):
+            marioClass.looping = False 
+            Pause()
+            marioClass.looping = True
         
     def jump(keys):
         if (keys[K_SPACE] and marioClass.marioJumpVelocity < -marioClass.jumpStrength) :
@@ -88,8 +95,9 @@ class marioClass:
             marioClass.characterX = marioClass.characterX + marioClass.marioSpeed
         if (marioClass.CameraX < 0 and marioClass.isPipe == False) :
             marioClass.CameraX = marioClass.CameraX + marioClass.cameraSpeed
-        if (marioClass.characterX  > WINDOW_WIDTH/5 and marioClass.CameraX < 8375 and not marioClass.isPipe): # Stops mario from running off screen right
+        if (marioClass.characterX  > WINDOW_WIDTH/5 and marioClass.CameraX < 8374 and not marioClass.isPipe): # Stops mario from running off screen right
             marioClass.characterX = marioClass.characterX - marioClass.marioSpeed
+            marioClass.CameraX == 8374
             if(marioClass.keys[K_LSHIFT]):
                 marioClass.characterX = marioClass.characterX - (marioClass.marioSpeed * 2)
         if(marioClass.characterX > WINDOW_WIDTH) :
@@ -173,6 +181,28 @@ class marioClass:
                 return 'goombDead'
             if (death == 'true'):
                 return 'death'
+            
+    def init():
+        marioClass.looping = True
+        marioClass.characterX = 20
+        marioClass.characterY = 570
+        #Jump Strength
+        marioClass.marioJumpVelocity = -23
+        marioClass.jumpStrength = 22
+        #Camera
+        marioClass.CameraX, marioClass.CameraY= 0, 0
+        #allows for mario Run animation
+        marioClass.printCharacter = mario
+        marioClass.count, marioClass.countLeft = 0, 0
+        #Goomba
+        marioClass.goombXCalc = 0
+        marioClass.goombaDeath = False
+        marioClass.isGround = True
+        marioClass.right = True
+        marioClass.goalX = 8900 # 8850
+        marioClass.isPipe = False
+        marioClass.marioSpeed = 1
+        marioClass.cameraSpeed = 8
 
     #Variables
     looping = True
